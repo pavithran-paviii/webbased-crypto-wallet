@@ -8,18 +8,49 @@ import { allNetworks } from "../../assets/constants";
 import { TbAlertTriangleFilled } from "react-icons/tb";
 import { IoMdLock, IoMdArrowBack } from "react-icons/io";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { derivePath } from "ed25519-hd-key";
+import nacl from "tweetnacl";
+import { Keypair } from "@solana/web3.js";
+import bs58 from "bs58";
 
 const Onboard = () => {
   const [currentStep, setCurrentStep] = useState(1); // default 1
   const [searchQuery, setSearchQuery] = useState("");
   const [checkboxChecked, setCheckboxChecked] = useState(false);
-  const [mnemonic, setMnemonic] = useState("");
+  const [mnemonic, setMnemonic] = useState(
+    "" || localStorage.getItem("generatedmnemonic")
+  );
   const [password, setPassword] = useState({});
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+  // functions
+
+  function generateNewWallet() {
+    const generatedSeedPhrase = generateMnemonic();
+    const seedFromPhase = mnemonicToSeedSync(generatedSeedPhrase);
+    setCurrentStep(4);
+    setCheckboxChecked(false);
+    setMnemonic(generatedSeedPhrase);
+
+    for (let i = 0; i < 3; i++) {
+      const derivedPath = `m/44'/501'/${i}'/0'`;
+      const derivedSeed = derivePath(
+        derivedPath,
+        seedFromPhase.toString("hex")
+      );
+      const secret = nacl.sign.keyPair.fromSeed(derivedSeed.key).secretKey;
+      const publicKey = Keypair.fromSecretKey(secret).publicKey.toBase58();
+      const secretBase58 = bs58.encode(secret);
+      console.log(publicKey, "publicKey" + i);
+      console.log(secretBase58, "secret" + i);
+    }
+  }
+
   return (
     <div className={classNames.onboard}>
-      {currentStep === 5 ? (
+      {currentStep === 6 ? (
+        "Wallet mnemonic generated!"
+      ) : currentStep === 5 ? (
         <>
           <div className={classNames.details}>
             <div
@@ -122,6 +153,8 @@ const Onboard = () => {
               onClick={() => {
                 setCurrentStep(6);
                 setCheckboxChecked(false);
+                const seed = mnemonicToSeedSync(mnemonic);
+                console.log(seed, "seed");
               }}
             >
               Next
@@ -248,12 +281,7 @@ const Onboard = () => {
               className={`${classNames.greyButton} ${
                 !checkboxChecked && classNames.notAllowed
               }`}
-              onClick={() => {
-                setCurrentStep(4);
-                setCheckboxChecked(false);
-                const generatedMnemonic = generateMnemonic();
-                setMnemonic(generatedMnemonic);
-              }}
+              onClick={generateNewWallet}
             >
               Next
             </button>
