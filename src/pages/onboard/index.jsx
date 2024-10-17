@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classNames from "./onboard.module.scss";
-import { generateMnemonic, mnemonicToSeedSync } from "bip39";
+import { generateMnemonic } from "bip39";
 
 //assets
 import logo from "../../assets/images/logo.png";
@@ -8,47 +8,23 @@ import { allNetworks } from "../../assets/constants";
 import { TbAlertTriangleFilled } from "react-icons/tb";
 import { IoMdLock, IoMdArrowBack } from "react-icons/io";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { derivePath } from "ed25519-hd-key";
-import nacl from "tweetnacl";
-import { Keypair } from "@solana/web3.js";
-import bs58 from "bs58";
+import { generateNewWallet } from "../../assets/functions";
 
-const Onboard = () => {
+const Onboard = ({ allAccounts, setAllAccounts }) => {
   const [currentStep, setCurrentStep] = useState(1); // default 1
   const [searchQuery, setSearchQuery] = useState("");
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [mnemonic, setMnemonic] = useState(
     "" || localStorage.getItem("generatedmnemonic")
   );
-  const [password, setPassword] = useState({});
+  const [password, setPassword] = useState(
+    {} || localStorage.getItem("walletLocalPassword")
+  );
   const [passwordVisible, setPasswordVisible] = useState(false);
-
-  // functions
-
-  function generateNewWallet() {
-    const generatedSeedPhrase = generateMnemonic();
-    const seedFromPhase = mnemonicToSeedSync(generatedSeedPhrase);
-    setCurrentStep(4);
-    setCheckboxChecked(false);
-    setMnemonic(generatedSeedPhrase);
-
-    for (let i = 0; i < 3; i++) {
-      const derivedPath = `m/44'/501'/${i}'/0'`;
-      const derivedSeed = derivePath(
-        derivedPath,
-        seedFromPhase.toString("hex")
-      );
-      const secret = nacl.sign.keyPair.fromSeed(derivedSeed.key).secretKey;
-      const publicKey = Keypair.fromSecretKey(secret).publicKey.toBase58();
-      const secretBase58 = bs58.encode(secret);
-      console.log(publicKey, "publicKey" + i);
-      console.log(secretBase58, "secret" + i);
-    }
-  }
 
   return (
     <div className={classNames.onboard}>
-      {currentStep === 6 ? (
+      {currentStep === 6 && allAccounts?.length > 0 ? (
         "Wallet mnemonic generated!"
       ) : currentStep === 5 ? (
         <>
@@ -110,7 +86,7 @@ const Onboard = () => {
               <input
                 type="checkbox"
                 checked={checkboxChecked}
-                onClick={(event) => {
+                onChange={(event) => {
                   setCheckboxChecked(event.target.checked);
 
                   if (password?.password !== password?.confirmpassword) {
@@ -151,10 +127,13 @@ const Onboard = () => {
                 classNames.notAllowed
               }`}
               onClick={() => {
+                localStorage.setItem(
+                  "walletLocalPassword",
+                  password?.confirmpassword
+                );
                 setCurrentStep(6);
                 setCheckboxChecked(false);
-                const seed = mnemonicToSeedSync(mnemonic);
-                console.log(seed, "seed");
+                generateNewWallet(0, mnemonic, allAccounts, setAllAccounts);
               }}
             >
               Next
@@ -214,7 +193,7 @@ const Onboard = () => {
               <input
                 type="checkbox"
                 checked={checkboxChecked}
-                onClick={(event) => setCheckboxChecked(event.target.checked)}
+                onChange={(event) => setCheckboxChecked(event.target.checked)}
               />
               <span>I saved my secret recovery phrase</span>
             </div>
@@ -270,7 +249,7 @@ const Onboard = () => {
               <input
                 type="checkbox"
                 checked={checkboxChecked}
-                onClick={(event) => setCheckboxChecked(event.target.checked)}
+                onChange={(event) => setCheckboxChecked(event.target.checked)}
               />
               <div>
                 I understand that I am responsible for saving my secret recovery
@@ -281,7 +260,13 @@ const Onboard = () => {
               className={`${classNames.greyButton} ${
                 !checkboxChecked && classNames.notAllowed
               }`}
-              onClick={generateNewWallet}
+              onClick={() => {
+                const generatedSeedPhrase = generateMnemonic();
+                setCurrentStep(4);
+                setCheckboxChecked(false);
+                setMnemonic(generatedSeedPhrase);
+                localStorage.setItem("generatedmnemonic", generatedSeedPhrase);
+              }}
             >
               Next
             </button>

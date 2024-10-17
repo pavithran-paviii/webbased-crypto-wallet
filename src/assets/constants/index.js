@@ -3,5 +3,5 @@ import ethereum from "../images/networks/ethereum.webp";
 
 export const allNetworks = [
   { name: "Solana", logo: solana },
-  { name: "Ethereum", logo: ethereum },
+  // { name: "Ethereum", logo: ethereum },
 ];

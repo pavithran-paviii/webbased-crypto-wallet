@@ -15,6 +15,7 @@ body {
 :root {
   --main-grey: #1c1d23;
   --main-blue: #57aeff;
+  --light-grey: #59585880;
 }
 
 ::-webkit-scrollbar {

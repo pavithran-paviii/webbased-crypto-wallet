@@ -1,0 +1,331 @@
+.wallet {
+  width: 500px;
+  margin: auto;
+  height: 95%;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  // justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+
+  & > .walletTab {
+    border: 0.5px solid var(--light-grey);
+    border-radius: 35px;
+    display: flex;
+    background: var(--light-grey);
+    // overflow: hidden;
+
+    & > div {
+      padding: 5px 0.5rem;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+
+      &:hover {
+        background: var(--main-grey);
+      }
+
+      & > img {
+        height: 1.5rem;
+      }
+
+      & > .walletCopiedText {
+        position: absolute;
+        bottom: -2.1rem;
+        left: -1.5rem;
+        padding: 5px;
+        background: var(--light-grey);
+        border-radius: 6px;
+        font-size: 0.8rem;
+        display: none;
+      }
+    }
+
+    & > .dropdownBtn {
+      border-left: 0.5px solid var(--light-grey);
+      border-right: 0.5px solid var(--light-grey);
+      font-size: 0.9rem;
+      font-weight: 400;
+      padding: 0.6rem 1rem;
+      gap: 10px;
+    }
+
+    & > :nth-child(1) {
+      border-radius: 35px 0 0 35px;
+    }
+
+    & > :last-child {
+      border-radius: 0px 35px 35px 0;
+    }
+  }
+
+  & > .dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    & > .totalValue {
+      font-size: 2.5rem;
+      font-weight: 550;
+    }
+
+    & > .todayChange {
+      font-weight: 500;
+      display: flex;
+      gap: 0.6rem;
+      opacity: 0.7;
+    }
+
+    & > .allBtns {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      color: var(--main-blue);
+      margin-top: 1rem;
+
+      & > div {
+        font-size: 1.6rem;
+
+        & > .iconDiv {
+          width: 3rem;
+          height: 3rem;
+          cursor: pointer;
+          background: var(--light-grey);
+          margin-bottom: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+
+          &:hover {
+            background: var(--main-grey);
+          }
+        }
+
+        & > .type {
+          font-size: 0.8rem;
+          color: white;
+          opacity: 0.6;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  & > .allAccounts {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+    top: 100%;
+    background: #000000;
+    padding: 1.5rem;
+    transition: all linear 0.2s;
+
+    & > .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.4rem;
+      font-weight: 450;
+      position: relative;
+
+      & > svg {
+        position: absolute;
+        top: 50%;
+        left: 0.5rem;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    & > .allWallets {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 3rem;
+
+      & > .eachWallet {
+        padding: 1rem;
+        border-radius: 8px;
+        background: var(--light-grey);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+
+        &:hover {
+          background: var(--main-grey);
+        }
+
+        & > .details {
+          width: 100%;
+
+          & > img {
+            height: 1.5rem;
+          }
+
+          & > .accountDetails {
+            & > .name {
+              font-size: 1rem;
+              font-weight: 450;
+              margin-bottom: 5px;
+            }
+
+            & > .publicKey {
+              opacity: 0.7;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 0.85rem;
+            }
+          }
+        }
+
+        & > .controls {
+          & > div {
+            display: flex;
+            align-items: center;
+
+            & > svg {
+              font-size: 1.1rem;
+
+              &:hover {
+                opacity: 0.7;
+              }
+            }
+          }
+        }
+
+        & > div {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+      }
+    }
+
+    & > .addNewWallet {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--main-blue);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+    }
+  }
+
+  & > .eachAccountSettings {
+    top: 0;
+    left: 150%;
+
+    & > .allOptions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+
+      & > .eachOption {
+        background: var(--light-grey);
+        padding: 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 520;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    & > .showPrivateKey {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      height: calc(100% - 3rem);
+
+      & > svg {
+        font-size: 2.5rem;
+      }
+
+      & > .title {
+        font-size: 1.8rem;
+        font-weight: 500;
+      }
+
+      & > .warning {
+        font-weight: 500;
+        font-size: 1.1rem;
+      }
+
+      & > .privateKey {
+        background: var(--light-grey);
+        padding: 1rem;
+        border-radius: 7px;
+        border: 2px solid #6a6868;
+        width: 100%;
+        padding-bottom: 2rem;
+        word-wrap: break-word;
+        font-size: 1.05rem;
+      }
+
+      & > .btnsContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-top: auto;
+        width: 100%;
+
+        & > div {
+          padding: 1rem;
+          border-radius: 8px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 1rem;
+          font-weight: 500;
+          cursor: pointer;
+          gap: 1rem;
+          transition: all linear 0.2s;
+
+          &:hover {
+            scale: 0.95;
+          }
+        }
+
+        & > :nth-child(1) {
+          background: white;
+          color: #000000;
+        }
+
+        & > :nth-child(2) {
+          background: var(--light-grey);
+        }
+      }
+    }
+  }
+
+  & > .isAllAccountsActive {
+    top: 0;
+  }
+  & > .isSingleAccountsActive {
+    left: 0;
+  }
+}
